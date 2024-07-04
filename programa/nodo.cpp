@@ -24,10 +24,10 @@ int main(int nargs, char* arg_arr[]){
         char* ip_nodo = arg_arr[1]; 
         char* puerto_tx = arg_arr[2];
         char* puerto_rx = arg_arr[3];
-        // Abrir puertos tx y rx
-        FILE *vport_tx = fopen(puerto_tx, "w");
-        FILE *vport_rx = fopen(puerto_rx, "r");
-        // Otra forma de implementar ips.
+        // Abrir puertos bidireccionales
+        FILE *vport_tx = fopen(puerto_tx, "r+");
+        FILE *vport_rx = fopen(puerto_rx, "r+");
+        
         convertir_ip(ip_nodo, ip_Nodo);
         printf("Nodo %X iniciado correctamente\n", ip_Nodo[0]);
         printf("Bienvenido al programa nodo\nQue accion desea hacer con el nodo?\n");
