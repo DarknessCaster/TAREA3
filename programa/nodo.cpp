@@ -20,7 +20,8 @@ int main(int nargs, char* arg_arr[]){
     if(nargs == 4){
         int opcion = 0;
         BYTE ip_Nodo[4];
-        
+        IP paquete;
+        BYTE TTL_MAX = 4;
         // Obtener ip del nodo y sus respectivos puertos.
         char* ip_nodo = arg_arr[1]; 
         char* puerto_tx = arg_arr[2];
@@ -29,6 +30,13 @@ int main(int nargs, char* arg_arr[]){
         FILE *vport_tx = fopen(puerto_tx, "r+"); 
         FILE *vport_rx = fopen(puerto_rx, "r+"); 
         // Inicializar tabla de ruta
+        // Bucle infinito para enviar y recibir mensajes
+        convertir_ip(ip_nodo, ip_Nodo);
+        while (1) {
+            //enviar broadcast
+            const char* mensaje[30] = "Mensaje broadcast";
+            //recibir broadcast
+        }
         fclose(vport_tx);
         fclose(vport_rx);
     } 
