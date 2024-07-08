@@ -20,7 +20,6 @@ int main(int nargs, char* arg_arr[]){
     if(nargs == 4){
         int opcion = 0;
         BYTE ip_Nodo[4];
-        IP paquete;
         BYTE TTL_MAX = 4;
         // Obtener ip del nodo y sus respectivos puertos.
         char* ip_nodo = arg_arr[1]; 
@@ -34,7 +33,7 @@ int main(int nargs, char* arg_arr[]){
         convertir_ip(ip_nodo, ip_Nodo);
         while (1) {
             //enviar broadcast
-            const char* mensaje[30] = "Mensaje broadcast";
+            enviar_broadcast(vport_tx, vport_rx, ip_Nodo, ips);
             //recibir broadcast
         }
         fclose(vport_tx);
