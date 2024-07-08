@@ -20,65 +20,15 @@ int main(int nargs, char* arg_arr[]){
     if(nargs == 4){
         int opcion = 0;
         BYTE ip_Nodo[4];
+        
         // Obtener ip del nodo y sus respectivos puertos.
         char* ip_nodo = arg_arr[1]; 
         char* puerto_tx = arg_arr[2];
         char* puerto_rx = arg_arr[3];
         // Abrir puertos bidireccionales
-        FILE *vport_tx = fopen(puerto_tx, "r+");
-        FILE *vport_rx = fopen(puerto_rx, "r+");
-        
-        convertir_ip(ip_nodo, ip_Nodo);
-        printf("Nodo %X iniciado correctamente\n", ip_Nodo[0]);
-        printf("Bienvenido al programa nodo\nQue accion desea hacer con el nodo?\n");
-        printf("1. Enviar mensaje\n2. Recibir mensaje\n3. Salir\n");
-        printf("Ingrese una opcion: ");
-        scanf("%d", &opcion);
-        if(opcion == 1){
-            //ejecutar emisor
-            if(memcmp(ips[0], ip_Nodo, 4) == 0){
-                menu_enviar(vport_tx, ip_Nodo, ips);
-            }
-            else if(memcmp(ips[1], ip_Nodo, 4) == 0){
-                menu_enviar(vport_tx, ip_Nodo, ips);
-            }
-            else if(memcmp(ips[2], ip_Nodo, 4) == 0){
-                menu_enviar(vport_tx, ip_Nodo, ips);
-            }
-            else if(memcmp(ips[3], ip_Nodo, 4) == 0){
-                menu_enviar(vport_tx, ip_Nodo, ips);
-            }
-            else if(memcmp(ips[4], ip_Nodo, 4) == 0){
-                menu_enviar(vport_tx, ip_Nodo, ips);
-            }
-        }
-        else if(opcion == 2){
-            //ejecutar receptor
-            if(memcmp(ips[0], ip_Nodo, 4) == 0){
-                menu_recibir(vport_tx, vport_rx, ip_Nodo, ips);
-            }
-            else if(memcmp(ips[1], ip_Nodo, 4) == 0){
-                menu_recibir(vport_tx, vport_rx, ip_Nodo, ips);
-            }
-            else if(memcmp(ips[2], ip_Nodo, 4) == 0){
-                menu_recibir(vport_tx, vport_rx, ip_Nodo, ips);
-            }
-            else if(memcmp(ips[3], ip_Nodo, 4) == 0){
-                menu_recibir(vport_tx, vport_rx, ip_Nodo, ips);
-            }
-            else if(memcmp(ips[4], ip_Nodo, 4) == 0){
-                menu_recibir(vport_tx, vport_rx, ip_Nodo, ips);
-            }
-        }
-        else if (opcion == 3) {
-            // Salir del programa
-            printf("Programa finalizado correctamente.\n");
-            return 0;
-        }
-        else {
-            printf("Opción no válida. Cerrando programa...\n");
-            return 0;
-        }
+        FILE *vport_tx = fopen(puerto_tx, "r+"); 
+        FILE *vport_rx = fopen(puerto_rx, "r+"); 
+        // Inicializar tabla de ruta
         fclose(vport_tx);
         fclose(vport_rx);
     } 

@@ -188,7 +188,7 @@ int menu_enviar(FILE *vport_tx, BYTE ip_Nodo[4], BYTE ips[6][4]){
             enviarIP(paquete, vport_tx, ip_Nodo, ips[4], TTL);
             break;
         case 5: // BROADCAST
-            TTL = 5;
+            TTL = 4;
             enviarIP(paquete, vport_tx, ip_Nodo, ips[5], TTL);
             break;
         default:
