@@ -244,7 +244,7 @@ void menu_recibir(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4
 void enviar_broadcast(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4]) {
     struct IP paquete;
     const char* mensaje = "Broadcast para crear tablas de rutas";
-    strncpy((const char*)paquete.datos, mensaje, MAX_DATA_SIZE);
+    strncpy((char*)paquete.datos, mensaje, MAX_DATA_SIZE);
     encapsularIP(paquete, MAX_TTL, 0, ip_Nodo, ips[5]);
     writeSlip(paquete.FRAMES, sizeof(paquete.FRAMES), vport_tx);
     writeSlip(paquete.FRAMES, sizeof(paquete.FRAMES), vport_rx);
