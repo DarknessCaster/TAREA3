@@ -37,8 +37,8 @@ int main(int nargs, char* arg_arr[]){
             enviar_broadcast(vport_b1, vport_b2, ip_Nodo, ips);
             sleep(10); // envia cada 10 segundos
             //recibir broadcast
-            recibir_mensaje(vport_b1, vport_b2, ip_Nodo, ips, tabla_rutas, num_rutas, puerto_b2);
-            recibir_mensaje(vport_b2, vport_b1, ip_Nodo, ips, tabla_rutas, num_rutas, puerto_b1);
+            num_rutas = recibir_mensaje(vport_b1, vport_b2, ip_Nodo, ips, tabla_rutas, num_rutas, puerto_b2);
+            num_rutas = recibir_mensaje(vport_b2, vport_b1, ip_Nodo, ips, tabla_rutas, num_rutas, puerto_b1);
         }
         fclose(vport_b1);
         fclose(vport_b2);
