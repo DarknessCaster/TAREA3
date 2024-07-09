@@ -205,7 +205,7 @@ int menu_enviar(FILE *vport_tx, BYTE ip_Nodo[4], BYTE ips[6][4]){
  *                             verifica el tipo de mensaje (unicast, broadcast) y actúa en consecuencia. Si es necesario,
  *                             retransmite el mensaje al siguiente nodo en la red.
  */
-void recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4], ruta* tabla_rutas, int num_rutas, char* puerto_rx){
+int recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4], ruta* tabla_rutas, int num_rutas, char* puerto_rx) {
     IP paquete_rx;
     int len_rx = 0;
     BYTE TTL_rx = 0; // distancia entre nodo emisor y nodo receptor
@@ -228,7 +228,7 @@ void recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6
             if (memcmp(paquete_rx.ip_origen, ip_Nodo, 4) != 0) {
                 printf("Mensaje enviado por el nodo %X: %s\n", paquete_rx.ip_origen[0], paquete_rx.datos);
                 // aqui deberia actualizar tabla de ruta
-                actualizar_rutas(puerto_rx, tabla_rutas, num_rutas, paquete_rx, TTL_rx);
+                num_rutas = actualizar_rutas(puerto_rx, tabla_rutas, num_rutas, paquete_rx, TTL_rx);
                 encapsularIP(paquete_rx, paquete_rx.TTL, paquete_rx.id, paquete_rx.ip_origen, paquete_rx.ip_destino);
                 writeSlip(paquete_rx.FRAMES, len_rx, vport_tx); // ENVIAR POR SLIP
             } else {
@@ -241,7 +241,9 @@ void recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6
             writeSlip(paquete_rx.FRAMES, len_rx, vport_tx); // ENVIAR POR SLIP
         }
     }
+    return num_rutas;
 }
+
 
 void enviar_broadcast(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4]) {
     struct IP paquete;
@@ -252,11 +254,11 @@ void enviar_broadcast(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[
     writeSlip(paquete.FRAMES, sizeof(paquete.FRAMES), vport_rx);
 }
 
-void actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paquete_rx, BYTE TTL_rx){
+int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paquete_rx, BYTE TTL_rx) {
     bool actualizado = false;
-    for (int i = 0; i < num_rutas; i++){
-        if (memcmp(tabla_rutas[i].ip, paquete_rx.ip_origen, 4) == 0){
-            if (tabla_rutas[i].TTL > TTL_rx){
+    for (int i = 0; i < num_rutas; i++) {
+        if (memcmp(tabla_rutas[i].ip, paquete_rx.ip_origen, 4) == 0) {
+            if (tabla_rutas[i].TTL > TTL_rx) {
                 tabla_rutas[i].TTL = TTL_rx;
                 strncpy(tabla_rutas[i].puerto, puerto_rx, 10);
                 actualizado = true;
@@ -265,16 +267,17 @@ void actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paqu
             break;
         }
     }
-    if(!actualizado && num_rutas < 4){
+    if (!actualizado && num_rutas < 4) {
         memcpy(tabla_rutas[num_rutas].ip, paquete_rx.ip_origen, 4);
         tabla_rutas[num_rutas].TTL = TTL_rx;
         strncpy(tabla_rutas[num_rutas].puerto, puerto_rx, 10);
         num_rutas++;
         actualizado = true;
     }
-    if(actualizado){
+    if (actualizado) {
         imprimir_rutas(tabla_rutas, num_rutas);
     }
+    return num_rutas;
 }
 
 void imprimir_rutas(ruta* tabla_rutas, int num_rutas){
