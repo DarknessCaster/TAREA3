@@ -22,7 +22,7 @@ int main(int nargs, char* arg_arr[]){
         int opcion = 0;
         BYTE ip_Nodo[4];
         ruta tabla_rutas[4];
-        int* num_rutas = 0;
+        int num_rutas = 0;
         // Obtener ip del nodo y sus respectivos puertos.
         char* ip_nodo = arg_arr[1]; 
         char* puerto_b1 = arg_arr[2];
