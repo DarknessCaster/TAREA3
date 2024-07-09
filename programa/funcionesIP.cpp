@@ -221,10 +221,10 @@ int recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6]
         }
         // mensaje broadcast
         else if (memcmp(paquete_rx.ip_destino, ips[5], 4) == 0){
-            paquete_rx.TTL--;
-            TTL_rx = MAX_TTL - paquete_rx.TTL; 
             // Verificar que no sea el propio nodo que envió el broadcast
             if (memcmp(paquete_rx.ip_origen, ip_Nodo, 4) != 0) {
+                paquete_rx.TTL--;
+                TTL_rx = MAX_TTL - paquete_rx.TTL; 
                 if(paquete_rx.id != 0){
                 printf("Se recibio un mensaje tipo --broadcast--\n");
                 printf("Mensaje enviado por el nodo %X: %s\n", paquete_rx.ip_origen[0], paquete_rx.datos);
@@ -251,7 +251,7 @@ void enviar_broadcast(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[
     struct IP paquete;
     int lng_frame;
     const char* mensaje = "Broadcast para crear tablas de rutas";
-    strncpy((const char*)paquete.datos, mensaje, MAX_DATA_SIZE);
+    strncpy((char*)paquete.datos, mensaje, MAX_DATA_SIZE);
     lng_frame = encapsularIP(paquete, MAX_TTL, 0, ip_Nodo, ips[5]);
     writeSlip(paquete.FRAMES, lng_frame, vport_tx);
     writeSlip(paquete.FRAMES, lng_frame, vport_rx);
