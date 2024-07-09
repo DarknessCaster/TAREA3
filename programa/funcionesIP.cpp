@@ -263,8 +263,9 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
                 strncpy(tabla_rutas[i].puerto, puerto_rx, 10);
                 actualizado = true;
                 printf("Tabla de rutas actualizada\n");
+                imprimir_rutas(tabla_rutas, num_rutas);
             }
-            break;
+            return num_rutas;
         }
     }
     if (!actualizado && num_rutas < 4) {
@@ -273,12 +274,12 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
         strncpy(tabla_rutas[num_rutas].puerto, puerto_rx, 10);
         num_rutas++;
         actualizado = true;
-    }
-    if (actualizado) {
+        printf("Nueva ruta añadida\n");
         imprimir_rutas(tabla_rutas, num_rutas);
     }
     return num_rutas;
 }
+
 
 void imprimir_rutas(ruta* tabla_rutas, int num_rutas){
     printf("Tabla de rutas:\n");
