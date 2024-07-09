@@ -25,22 +25,24 @@ int main(int nargs, char* arg_arr[]){
         int num_rutas = 0;
         // Obtener ip del nodo y sus respectivos puertos.
         char* ip_nodo = arg_arr[1]; 
-        char* puerto_tx = arg_arr[2];
-        char* puerto_rx = arg_arr[3];
+        char* puerto_b1 = arg_arr[2];
+        char* puerto_b2 = arg_arr[3];
         // Abrir puertos bidireccionales
-        FILE *vport_tx = fopen(puerto_tx, "r+"); 
-        FILE *vport_rx = fopen(puerto_rx, "r+"); 
+        FILE *vport_b1 = fopen(puerto_b1, "r+"); 
+        FILE *vport_b2 = fopen(puerto_b2, "r+"); 
         // Inicializar tabla de ruta
         // Bucle infinito para enviar y recibir mensajes
         convertir_ip(ip_nodo, ip_Nodo);
         while (1) {
             //enviar broadcast
-            enviar_broadcast(vport_tx, vport_rx, ip_Nodo, ips);
+            enviar_broadcast(vport_b1, vport_b2, ip_Nodo, ips);
             sleep(10); // envia cada 10 segundos
             //recibir broadcast
+            recibir_mensaje(vport_b1, vport_b2, ip_Nodo, ips, tabla_rutas, num_rutas, puerto_b2);
+            recibir_mensaje(vport_b2, vport_b1, ip_Nodo, ips, tabla_rutas, num_rutas, puerto_b1);
         }
-        fclose(vport_tx);
-        fclose(vport_rx);
+        fclose(vport_b1);
+        fclose(vport_b2);
     } 
     else{
         printf("--------------------MANUAL DE USUARIO--------------------\n");
