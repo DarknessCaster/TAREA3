@@ -255,11 +255,34 @@ void enviar_broadcast(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[
 void actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int* num_rutas, IP &paquete_rx, BYTE TTL_rx){
     bool actualizado = false;
     for (int i = 0; i < *num_rutas; i++){
-        if (memcmp(tabla_rutas[i].ip, paquete_rx.ip_destino, 4) == 0){
+        if (memcmp(tabla_rutas[i].ip, paquete_rx.ip_origen, 4) == 0){
             if (tabla_rutas[i].TTL > TTL_rx){
                 tabla_rutas[i].TTL = TTL_rx;
-                tabla_rutas
+                strncpy(tabla_rutas[i].puerto, puerto_rx, 10);
+                actualizado = true;
+                printf("Tabla de rutas actualizada\n");
             }
+            break;
         }
+    }
+    if(!actualizado && *num_rutas < 4){
+        memcpy(tabla_rutas[*num_rutas].ip, paquete_rx.ip_origen, 4);
+        tabla_rutas[*num_rutas].TTL = TTL_rx;
+        strncpy(tabla_rutas[*num_rutas].puerto, puerto_rx, 10);
+        (*num_rutas)++;
+        actualizado = true;
+    }
+    if(actualizado){
+        imprimir_rutas(tabla_rutas, *num_rutas);
+    }
+}
+
+void imprimir_rutas(ruta* tabla_rutas, int num_rutas){
+    printf("Tabla de rutas:\n");
+    for (int i = 0; i < num_rutas; i++) {
+        printf("Destino: %X.%X.%X.%X, Distancia: %d, Puerto: %s\n",
+               tabla_rutas[i].ip[0], tabla_rutas[i].ip[1], 
+               tabla_rutas[i].ip[2], tabla_rutas[i].ip[3], 
+               tabla_rutas[i].TTL, tabla_rutas[i].puerto);
     }
 }
