@@ -205,7 +205,7 @@ int menu_enviar(FILE *vport_tx, BYTE ip_Nodo[4], BYTE ips[6][4]){
  *                             verifica el tipo de mensaje (unicast, broadcast) y actúa en consecuencia. Si es necesario,
  *                             retransmite el mensaje al siguiente nodo en la red.
  */
-void recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4], ruta* tabla_rutas, int* num_rutas, char* puerto_rx){
+void recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4], ruta* tabla_rutas, int num_rutas, char* puerto_rx){
     IP paquete_rx;
     int len_rx = 0;
     BYTE TTL_rx = 0; // distancia entre nodo emisor y nodo receptor
@@ -252,9 +252,9 @@ void enviar_broadcast(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[
     writeSlip(paquete.FRAMES, sizeof(paquete.FRAMES), vport_rx);
 }
 
-void actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int* num_rutas, IP paquete_rx, BYTE TTL_rx){
+void actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paquete_rx, BYTE TTL_rx){
     bool actualizado = false;
-    for (int i = 0; i < *num_rutas; i++){
+    for (int i = 0; i < num_rutas; i++){
         if (memcmp(tabla_rutas[i].ip, paquete_rx.ip_origen, 4) == 0){
             if (tabla_rutas[i].TTL > TTL_rx){
                 tabla_rutas[i].TTL = TTL_rx;
@@ -265,15 +265,15 @@ void actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int* num_rutas, IP paq
             break;
         }
     }
-    if(!actualizado && *num_rutas < 4){
-        memcpy(tabla_rutas[*num_rutas].ip, paquete_rx.ip_origen, 4);
-        tabla_rutas[*num_rutas].TTL = TTL_rx;
-        strncpy(tabla_rutas[*num_rutas].puerto, puerto_rx, 10);
-        (*num_rutas)++;
+    if(!actualizado && num_rutas < 4){
+        memcpy(tabla_rutas[num_rutas].ip, paquete_rx.ip_origen, 4);
+        tabla_rutas[num_rutas].TTL = TTL_rx;
+        strncpy(tabla_rutas[num_rutas].puerto, puerto_rx, 10);
+        num_rutas++;
         actualizado = true;
     }
     if(actualizado){
-        imprimir_rutas(tabla_rutas, *num_rutas);
+        imprimir_rutas(tabla_rutas, num_rutas);
     }
 }
 
