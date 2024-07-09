@@ -205,7 +205,7 @@ int menu_enviar(FILE *vport_tx, BYTE ip_Nodo[4], BYTE ips[6][4]){
  *                             verifica el tipo de mensaje (unicast, broadcast) y actúa en consecuencia. Si es necesario,
  *                             retransmite el mensaje al siguiente nodo en la red.
  */
-void recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4]){
+void recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4], ruta* tabla_rutas, int* num_rutas, char* puerto_rx){
     IP paquete_rx;
     int len_rx = 0;
     BYTE TTL_rx = 0; // distancia entre nodo emisor y nodo receptor
@@ -226,9 +226,9 @@ void recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6
             TTL_rx = MAX_TTL - paquete_rx.TTL; 
             // Verificar que no sea el propio nodo que envió el broadcast
             if (memcmp(paquete_rx.ip_origen, ip_Nodo, 4) != 0) {
-                printf("Mensaje enviado por el nodo %X\n", paquete_rx.ip_origen[0]);
-                printf("%s\n", paquete_rx.datos);
+                printf("Mensaje enviado por el nodo %X: %s\n", paquete_rx.ip_origen[0], paquete_rx.datos);
                 // aqui deberia actualizar tabla de ruta
+                actualizar_rutas(puerto_rx, num_rutas, paquete_rx, TTL_rx);
                 encapsularIP(paquete_rx, paquete_rx.TTL, paquete_rx.id, paquete_rx.ip_origen, paquete_rx.ip_destino);
                 writeSlip(paquete_rx.FRAMES, len_rx, vport_tx); // ENVIAR POR SLIP
             } else {
