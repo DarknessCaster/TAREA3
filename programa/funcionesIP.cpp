@@ -264,7 +264,7 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
                 actualizado = true;
                 printf("Tabla de rutas actualizada\n");
             }
-            return num_rutas;
+            break;
         }
     }
     if (!actualizado && num_rutas < 4) {
