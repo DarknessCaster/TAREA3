@@ -21,7 +21,7 @@ struct IP {
 
 struct ruta{
     BYTE ip[4]; // Destino
-    char puerto[10]; // puerto RECEPTOR
+    char puerto[9]; // puerto RECEPTOR
     BYTE TTL; // TTL mas efectivo
     ruta() {
         TTL = 255;

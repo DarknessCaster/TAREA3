@@ -221,12 +221,14 @@ int recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6]
         }
         // mensaje broadcast
         else if (memcmp(paquete_rx.ip_destino, ips[5], 4) == 0){
-            printf("Se recibio un mensaje tipo --broadcast--\n");
             paquete_rx.TTL--;
             TTL_rx = MAX_TTL - paquete_rx.TTL; 
             // Verificar que no sea el propio nodo que envió el broadcast
             if (memcmp(paquete_rx.ip_origen, ip_Nodo, 4) != 0) {
+                if(paquete_rx.id != 0){
+                printf("Se recibio un mensaje tipo --broadcast--\n");
                 printf("Mensaje enviado por el nodo %X: %s\n", paquete_rx.ip_origen[0], paquete_rx.datos);
+                }
                 // aqui deberia actualizar tabla de ruta
                 num_rutas = actualizar_rutas(puerto_rx, tabla_rutas, num_rutas, paquete_rx, TTL_rx);
                 encapsularIP(paquete_rx, paquete_rx.TTL, paquete_rx.id, paquete_rx.ip_origen, paquete_rx.ip_destino);
@@ -264,8 +266,9 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
                 tabla_rutas[i].puerto[9] = '\0';
                 actualizado = true;
                 printf("Tabla de rutas actualizada\n");
+                imprimir_rutas(tabla_rutas, num_rutas);
             }
-            break;
+            return num_rutas;
         }
     }
     if (!actualizado && num_rutas < 4) {
@@ -275,12 +278,12 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
         tabla_rutas[i].puerto[9] = '\0';
         num_rutas++;
         actualizado = true;
-    }
-    if (actualizado) {
+        printf("Nueva ruta añadida\n");
         imprimir_rutas(tabla_rutas, num_rutas);
     }
     return num_rutas;
 }
+
 
 void imprimir_rutas(ruta* tabla_rutas, int num_rutas){
     printf("Tabla de rutas:\n");
