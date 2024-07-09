@@ -19,7 +19,6 @@ BYTE ips[6][4] = {
 
 int main(int nargs, char* arg_arr[]){
     if(nargs == 4){
-        int opcion = 0;
         BYTE ip_Nodo[4];
         ruta tabla_rutas[4];
         int num_rutas = 0;
