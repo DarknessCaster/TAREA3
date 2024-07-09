@@ -208,39 +208,43 @@ int menu_enviar(FILE *vport_tx, BYTE ip_Nodo[4], BYTE ips[6][4]){
 int recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4], ruta* tabla_rutas, int num_rutas, char* puerto_rx) {
     IP paquete_rx;
     int len_rx = 0;
-    BYTE TTL_rx; // distancia entre nodo emisor y nodo receptor
+    BYTE TTL_rx = 0;
     len_rx = readSlip(paquete_rx.FRAMES, MAX_DATOS_SIZE + 20, vport_rx);
-    // Si detecta escritura
+    
     if (len_rx > 0) { 
-        desempaquetarIP(paquete_rx); // Desempaqueta los datos IP recibidos
+        desempaquetarIP(paquete_rx);
         short largo = (paquete_rx.lng_datos[0] | (paquete_rx.lng_datos[1] << 8));
         paquete_rx.datos[largo] = '\0';
+
         // mensaje unicast
         if (memcmp(paquete_rx.ip_destino, ip_Nodo, 4) == 0) {
             printf("Se recibio un mensaje tipo unicast:\n%s\n", paquete_rx.datos);
         }
         // mensaje broadcast
-        else if (memcmp(paquete_rx.ip_destino, ips[5], 4) == 0){
-            // Verificar que no sea el propio nodo que envió el broadcast
-            if (memcmp(paquete_rx.ip_origen, ip_Nodo, 4) != 0) {
+        else if (memcmp(paquete_rx.ip_destino, ips[5], 4) == 0) {
+            if (paquete_rx.TTL > 0) {
                 paquete_rx.TTL--;
-                TTL_rx = MAX_TTL - paquete_rx.TTL; 
-                if(paquete_rx.id != 0){
-                printf("Se recibio un mensaje tipo --broadcast--\n");
-                printf("Mensaje enviado por el nodo %X: %s\n", paquete_rx.ip_origen[0], paquete_rx.datos);
+                TTL_rx = MAX_TTL - paquete_rx.TTL;
+
+                // Verificar que no sea el propio nodo que envió el broadcast
+                if (memcmp(paquete_rx.ip_origen, ip_Nodo, 4) != 0) {
+                    if (paquete_rx.id != 0) {
+                        printf("Se recibio un mensaje tipo --broadcast--\n");
+                        printf("Mensaje enviado por el nodo %X: %s\n", paquete_rx.ip_origen[0], paquete_rx.datos);
+                    }
+                    num_rutas = actualizar_rutas(puerto_rx, tabla_rutas, num_rutas, paquete_rx, TTL_rx);
+                    encapsularIP(paquete_rx, paquete_rx.TTL, paquete_rx.id, paquete_rx.ip_origen, paquete_rx.ip_destino);
+                    writeSlip(paquete_rx.FRAMES, len_rx, vport_tx);
+                } else {
+                    printf("El mensaje broadcast es propio, se descarta.\n");
                 }
-                // aqui deberia actualizar tabla de ruta
-                num_rutas = actualizar_rutas(puerto_rx, tabla_rutas, num_rutas, paquete_rx, TTL_rx);
-                encapsularIP(paquete_rx, paquete_rx.TTL, paquete_rx.id, paquete_rx.ip_origen, paquete_rx.ip_destino);
-                writeSlip(paquete_rx.FRAMES, len_rx, vport_tx); // ENVIAR POR SLIP
             } else {
-                printf("El mensaje broadcast es propio, se descarta.\n");
+                printf("El TTL del mensaje ha expirado, se descarta.\n");
             }
-        }
-        else{
+        } else {
             paquete_rx.TTL--;
             encapsularIP(paquete_rx, paquete_rx.TTL, paquete_rx.id, paquete_rx.ip_origen, paquete_rx.ip_destino);
-            writeSlip(paquete_rx.FRAMES, len_rx, vport_tx); // ENVIAR POR SLIP
+            writeSlip(paquete_rx.FRAMES, len_rx, vport_tx);
         }
     }
     return num_rutas;
@@ -261,7 +265,7 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
     bool actualizado = false;
     for (int i = 0; i < num_rutas; i++) {
         if (memcmp(tabla_rutas[i].ip, paquete_rx.ip_origen, 4) == 0) {
-            if (tabla_rutas[i].TTL >= TTL_rx) {
+            if (tabla_rutas[i].TTL > TTL_rx) {
                 tabla_rutas[i].TTL = TTL_rx;
                 strncpy(tabla_rutas[i].puerto, puerto_rx, 10);
                 tabla_rutas[i].puerto[10] = '\0';
