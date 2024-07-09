@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #include "serial.h"
 #include "slip.h"
 #include "ip.h"
@@ -20,7 +21,8 @@ int main(int nargs, char* arg_arr[]){
     if(nargs == 4){
         int opcion = 0;
         BYTE ip_Nodo[4];
-        BYTE TTL_MAX = 4;
+        ruta tabla_rutas[4];
+        int num_rutas = 0;
         // Obtener ip del nodo y sus respectivos puertos.
         char* ip_nodo = arg_arr[1]; 
         char* puerto_tx = arg_arr[2];
@@ -34,6 +36,7 @@ int main(int nargs, char* arg_arr[]){
         while (1) {
             //enviar broadcast
             enviar_broadcast(vport_tx, vport_rx, ip_Nodo, ips);
+            sleep(10); // envia cada 10 segundos
             //recibir broadcast
         }
         fclose(vport_tx);
