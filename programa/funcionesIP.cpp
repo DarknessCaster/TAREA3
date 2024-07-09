@@ -252,7 +252,7 @@ void enviar_broadcast(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[
     writeSlip(paquete.FRAMES, sizeof(paquete.FRAMES), vport_rx);
 }
 
-void actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int* num_rutas, IP &paquete_rx, BYTE TTL_rx){
+void actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int* num_rutas, IP paquete_rx, BYTE TTL_rx){
     bool actualizado = false;
     for (int i = 0; i < *num_rutas; i++){
         if (memcmp(tabla_rutas[i].ip, paquete_rx.ip_origen, 4) == 0){

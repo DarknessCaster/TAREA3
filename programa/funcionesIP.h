@@ -10,6 +10,6 @@ void enviarIP(IP paquete, FILE *vport_tx, BYTE ip_origen[4], BYTE ip_destino[4],
 int menu_enviar(FILE *vport_tx, BYTE ip_Nodo[4], BYTE ips[6][4]);
 void recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4], ruta* tabla_rutas, int* num_rutas, char* puerto_rx);
 void enviar_broadcast(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4]);
-void actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int* num_rutas, IP* paquete_rx, BYTE TTL_rx);
+void actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int* num_rutas, IP paquete_rx, BYTE TTL_rx);
 void imprimir_rutas(ruta* tabla_rutas, int num_rutas);
 #endif
