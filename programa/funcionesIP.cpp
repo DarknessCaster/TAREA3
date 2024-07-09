@@ -261,6 +261,7 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
             if (tabla_rutas[i].TTL >= TTL_rx) {
                 tabla_rutas[i].TTL = TTL_rx;
                 strncpy(tabla_rutas[i].puerto, puerto_rx, 10);
+                tabla_rutas[i].puerto[9] = '\0';
                 actualizado = true;
                 printf("Tabla de rutas actualizada\n");
             }
@@ -271,6 +272,7 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
         memcpy(tabla_rutas[num_rutas].ip, paquete_rx.ip_origen, 4);
         tabla_rutas[num_rutas].TTL = TTL_rx;
         strncpy(tabla_rutas[num_rutas].puerto, puerto_rx, 10);
+        tabla_rutas[i].puerto[9] = '\0';
         num_rutas++;
         actualizado = true;
     }
