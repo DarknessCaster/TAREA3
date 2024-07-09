@@ -249,11 +249,12 @@ int recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6]
 
 void enviar_broadcast(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4]) {
     struct IP paquete;
+    int lng_frame;
     const char* mensaje = "Broadcast para crear tablas de rutas";
-    strncpy((char*)paquete.datos, mensaje, MAX_DATA_SIZE);
-    encapsularIP(paquete, MAX_TTL, 0, ip_Nodo, ips[5]);
-    writeSlip(paquete.FRAMES, sizeof(paquete.FRAMES), vport_tx);
-    writeSlip(paquete.FRAMES, sizeof(paquete.FRAMES), vport_rx);
+    strncpy((const char*)paquete.datos, mensaje, MAX_DATA_SIZE);
+    lng_frame = encapsularIP(paquete, MAX_TTL, 0, ip_Nodo, ips[5]);
+    writeSlip(paquete.FRAMES, lng_frame, vport_tx);
+    writeSlip(paquete.FRAMES, lng_frame, vport_rx);
 }
 
 int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paquete_rx, BYTE TTL_rx) {
