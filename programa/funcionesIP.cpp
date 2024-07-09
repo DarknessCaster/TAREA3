@@ -208,7 +208,7 @@ int menu_enviar(FILE *vport_tx, BYTE ip_Nodo[4], BYTE ips[6][4]){
 int recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4], ruta* tabla_rutas, int num_rutas, char* puerto_rx) {
     IP paquete_rx;
     int len_rx = 0;
-    BYTE TTL_rx = 0; // distancia entre nodo emisor y nodo receptor
+    BYTE TTL_rx; // distancia entre nodo emisor y nodo receptor
     len_rx = readSlip(paquete_rx.FRAMES, MAX_DATOS_SIZE + 20, vport_rx);
     // Si detecta escritura
     if (len_rx > 0) { 
