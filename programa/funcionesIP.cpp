@@ -267,6 +267,7 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
     for (int i = 0; i < num_rutas; i++) {
         if (memcmp(tabla_rutas[i].ip, paquete_rx.ip_origen, 4) == 0) {
             if (tabla_rutas[i].TTL > TTL_rx) {
+                printf("TTL QUE SE ESTA REEMPLAZANDO EN TABLA: %d", TTL_rx);
                 tabla_rutas[i].TTL = TTL_rx;
                 strncpy(tabla_rutas[i].puerto, puerto_rx, 10);
                 tabla_rutas[i].puerto[10] = '\0';
