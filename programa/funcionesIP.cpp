@@ -232,6 +232,7 @@ int recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6]
                         printf("Se recibio un mensaje tipo --broadcast--\n");
                         printf("Mensaje enviado por el nodo %X: %s\n", paquete_rx.ip_origen[0], paquete_rx.datos);
                     }
+                    printf("Se esta pasando el TTL: %d", TTL_rx);
                     num_rutas = actualizar_rutas(puerto_rx, tabla_rutas, num_rutas, paquete_rx, TTL_rx);
                     encapsularIP(paquete_rx, paquete_rx.TTL, paquete_rx.id, paquete_rx.ip_origen, paquete_rx.ip_destino);
                     writeSlip(paquete_rx.FRAMES, len_rx, vport_tx);
