@@ -271,7 +271,7 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
                 printf("TTL QUE SE ESTA REEMPLAZANDO EN TABLA: %d\n", TTL_rx);
                 tabla_rutas[i].TTL = TTL_rx;
                 strncpy(tabla_rutas[i].puerto, puerto_rx, 10);
-                tabla_rutas[i].puerto[10] = '\0';
+                //tabla_rutas[i].puerto[10] = '\0';
                 actualizado = true;
                 printf("Tabla de rutas actualizada\n");
             }
@@ -284,7 +284,7 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
         tabla_rutas[num_rutas].TTL = TTL_rx;
         printf("TTL AGREGADO: %d", tabla_rutas[num_rutas].TTL);
         strncpy(tabla_rutas[num_rutas].puerto, puerto_rx, 10);
-        tabla_rutas[num_rutas].puerto[10] = '\0';
+        //tabla_rutas[num_rutas].puerto[10] = '\0';
         num_rutas++;
         actualizado = true;
         printf("Nueva ruta añadida\n");
