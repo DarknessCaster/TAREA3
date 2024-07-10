@@ -270,6 +270,7 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
                 snprintf(tabla_rutas[i].puerto, sizeof(tabla_rutas[i].puerto), "%s", puerto_rx); // Usar snprintf para copiar y terminar en nulo
                 actualizado = true;
                 printf("Tabla de rutas actualizada\n");
+                imprimir_rutas(tabla_rutas, num_rutas);
             }
             return num_rutas;
         }
@@ -281,8 +282,6 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
         num_rutas++;
         actualizado = true;
         printf("Nueva ruta añadida\n");
-    }
-    if (actualizado) {
         imprimir_rutas(tabla_rutas, num_rutas);
     }
     return num_rutas;
