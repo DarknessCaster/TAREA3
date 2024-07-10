@@ -19,12 +19,14 @@ struct IP {
     BYTE FRAMES[MAX_DATOS_SIZE + 16];
 };
 
-struct ruta{
+struct ruta {
     BYTE ip[4]; // Destino
     char puerto[10]; // puerto RECEPTOR
-    BYTE TTL; // TTL mas efectivo
+    BYTE TTL; // TTL más efectivo
     ruta() {
-        TTL = 255;
+        memset(ip, 0, 4); // Inicializar la IP a ceros
+        memset(puerto, 0, 10); // Inicializar el puerto a ceros
+        TTL = 255; // Valor máximo del TTL para indicar que no ha sido actualizado
     }
 };
 #endif
