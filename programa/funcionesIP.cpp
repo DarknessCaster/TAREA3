@@ -291,7 +291,7 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
 void imprimir_rutas(ruta* tabla_rutas, int num_rutas) {
     printf("Tabla de rutas:\n");
     for (int i = 0; i < num_rutas; i++) {
-        printf("Destino: %X.%X.%X.%X, Distancia: %d, Puerto: %s\n",
+        printf("|| Destino: %X.%X.%X.%X || Distancia: %d || Puerto: %s ||\n",
                tabla_rutas[i].ip[0], tabla_rutas[i].ip[1], 
                tabla_rutas[i].ip[2], tabla_rutas[i].ip[3], 
                tabla_rutas[i].TTL, tabla_rutas[i].puerto);
