@@ -282,6 +282,7 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
         printf("TTL QUE SE ESTA AGREGANDO EN TABLA: %d\n", TTL_rx);
         memcpy(tabla_rutas[num_rutas].ip, paquete_rx.ip_origen, 4);
         tabla_rutas[num_rutas].TTL = TTL_rx;
+        printf("TTL AGREGADO: %d", tabla_rutas[num_rutas].TTL);
         strncpy(tabla_rutas[num_rutas].puerto, puerto_rx, 10);
         tabla_rutas[num_rutas].puerto[10] = '\0';
         num_rutas++;
