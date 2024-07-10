@@ -232,7 +232,6 @@ int recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6]
                         printf("Se recibio un mensaje tipo --broadcast--\n");
                         printf("Mensaje enviado por el nodo %X: %s\n", paquete_rx.ip_origen[0], paquete_rx.datos);
                     }
-                    printf("Se esta pasando el TTL: %d\n", TTL_rx);
                     num_rutas = actualizar_rutas(puerto_rx, tabla_rutas, num_rutas, paquete_rx, TTL_rx);
                     encapsularIP(paquete_rx, paquete_rx.TTL, paquete_rx.id, paquete_rx.ip_origen, paquete_rx.ip_destino);
                     writeSlip(paquete_rx.FRAMES, len_rx, vport_tx);
@@ -266,12 +265,10 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
     bool actualizado = false;
     for (int i = 0; i < num_rutas; i++) {
         if (memcmp(tabla_rutas[i].ip, paquete_rx.ip_origen, 4) == 0) {
-            printf("condicion ejecutado: %d > %d?\n", tabla_rutas[i].TTL, TTL_rx);
             if (tabla_rutas[i].TTL > TTL_rx) {
-                printf("TTL QUE SE ESTA REEMPLAZANDO EN TABLA: %d\n", TTL_rx);
                 tabla_rutas[i].TTL = TTL_rx;
                 strncpy(tabla_rutas[i].puerto, puerto_rx, 10);
-                //tabla_rutas[i].puerto[10] = '\0';
+                tabla_rutas[i].puerto[9] = '\0';
                 actualizado = true;
                 printf("Tabla de rutas actualizada\n");
             }
@@ -279,12 +276,10 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
         }
     }
     if (!actualizado && num_rutas < 4) {
-        printf("TTL QUE SE ESTA AGREGANDO EN TABLA: %d\n", TTL_rx);
         memcpy(tabla_rutas[num_rutas].ip, paquete_rx.ip_origen, 4);
         tabla_rutas[num_rutas].TTL = TTL_rx;
-        printf("TTL AGREGADO: %d", tabla_rutas[num_rutas].TTL);
         strncpy(tabla_rutas[num_rutas].puerto, puerto_rx, 10);
-        //tabla_rutas[num_rutas].puerto[10] = '\0';
+        tabla_rutas[num_rutas].puerto[9] = '\0';
         num_rutas++;
         actualizado = true;
         printf("Nueva ruta añadida\n");
