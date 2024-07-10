@@ -21,12 +21,11 @@ struct IP {
 
 struct ruta {
     BYTE ip[4]; // Destino
-    char puerto[20]; // puerto RECEPTOR (buffer suficientemente grande)
+    char puerto[11]; // puerto RECEPTOR 
     BYTE TTL; // TTL más efectivo
 
     ruta() {
         TTL = 255;
-        puerto[0] = '\0'; // Inicializar puerto como cadena vacía
     }
 };
 #endif
