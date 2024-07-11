@@ -5,7 +5,6 @@
 #include "serial.h"
 #include "slip.h"
 #include "ip.h"
-#include <sys/select.h>
 #include "funcionesIP.h"
 
 #define MAX_DATA_SIZE 1500
@@ -42,13 +41,22 @@ int main(int nargs, char* arg_arr[]){
             sleep(5); // envia cada 5 segundos
 
             // Verificar si hay entrada del usuario para mostrar el menú
-            if (getchar()) {
+            // La siguiente implementacion fue para hacer que si el programa
+            // detecta una entrada ejecute el menu y el usuario sea capaz de enviar mensaje
+            // Pero al momento de ejecutar el nodo el programa quedaba esperando una entrada por teclado
+            // Evitando asi que se creen las rutas automaticamente
+            /*if (getchar()) {
                 int opcion;
                 mostrar_menu();
                 scanf("%d", &opcion);
                 getchar();
                 ejecutar_opcion(ips, opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, num_rutas);
+            */
+            int opcion = verificar_entrada_usuario();
+            if (opcion != -1) {
+                ejecutar_opcion(opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, &num_rutas);
             }
+           
         }
         fclose(vport_b1);
         fclose(vport_b2);

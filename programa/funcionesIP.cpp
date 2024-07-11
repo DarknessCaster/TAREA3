@@ -265,10 +265,10 @@ void mostrar_menu() {
 }
 
 
-void verificar_entrada_usuario(BYTE ips[6][4], FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[4], int num_rutas) {
+int verificar_entrada_usuario() {
     fd_set conjunto_lectura;
     struct timeval tiempo_espera;
-    int opcion;
+    int opcion = -1;
 
     // Configurar el conjunto de descriptores de archivo para monitorizar la entrada estándar (teclado)
     FD_ZERO(&conjunto_lectura);
@@ -283,14 +283,13 @@ void verificar_entrada_usuario(BYTE ips[6][4], FILE *vport_b1, FILE *vport_b2, B
         // Si hay entrada del usuario, leer la opción
         if (scanf("%d", &opcion) == 1) {
             getchar(); // Consumir el salto de línea o el carácter residual en el buffer
-
-            // Procesar la opción seleccionada
-            ejecutar_opcion(ips, opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, num_rutas);
         } else {
             printf("Entrada inválida. Intente de nuevo.\n");
             getchar(); // Limpiar el buffer de entrada
         }
     }
+    
+    return opcion;
 }
 
 void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[], int num_rutas) {
