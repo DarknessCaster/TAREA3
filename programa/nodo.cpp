@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "serial.h"
+#include "conio.h"
 #include "slip.h"
 #include "ip.h"
 #include "funcionesIP.h"
@@ -41,7 +42,7 @@ int main(int nargs, char* arg_arr[]){
             sleep(5); // envia cada 5 segundos
 
             // Verificar si hay entrada del usuario para mostrar el menú
-            if (kbhit()) {
+            if (_kbhit()) {
                 int opcion;
                 mostrar_menu();
                 scanf("%d", &opcion);
