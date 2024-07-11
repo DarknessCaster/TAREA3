@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "ip.h"
 #include "funcionesIP.h"
+#include <unistd.h>
 #include <sys/select.h>
 #include "serial.h"
 #include "slip.h"
@@ -154,49 +155,6 @@ void enviarIP(IP paquete, FILE *vport_tx, BYTE ip_origen[4], BYTE ip_destino[4],
     writeSlip(paquete.FRAMES, lng_frame, vport_tx);// ENVIAR POR SLIP
 }
 
-/*  Nombre de la función: menu_enviar
- *  Tipo de función: int
- *  Parámetros: FILE *vport_tx, BYTE ip_Nodo[4], BYTE ips[6][4].
- *  Descripción de la función: Esta función muestra un menú al usuario para seleccionar el nodo de destino al que desea enviar un mensaje.
- *                             Según la opción seleccionada, la función llama a la función enviarIP con los parámetros correspondientes,
- *                             incluyendo el TTL adecuado para cada nodo de destino.
- */
-int menu_enviar(FILE *vport_tx, BYTE ip_Nodo[4], BYTE ips[6][4]){
-    int opcion;
-    BYTE TTL; 
-    IP paquete; // Se inicializa paquete con protocolo IP modificado
-    printf("A quien desea enviar el mensaje?\n");
-    printf("1. B\n2. C\n3. D\n4. E\n5. A todos (broadcast)\n");
-    printf("Ingrese una opcion: ");
-    scanf("%d", &opcion);
-    getchar();
-    switch (opcion) {
-        case 1: // NODO B
-            TTL = 1;
-            enviarIP(paquete, vport_tx, ip_Nodo, ips[1], TTL);
-            break;
-        case 2: // NODO C
-            TTL = 2;
-            enviarIP(paquete, vport_tx, ip_Nodo, ips[2], TTL);
-            break;
-        case 3: // NODO D
-            TTL = 3;
-            enviarIP(paquete, vport_tx, ip_Nodo, ips[3], TTL);
-            break;
-        case 4: // NODO E
-            TTL = 4;
-            enviarIP(paquete, vport_tx, ip_Nodo, ips[4], TTL);
-            break;
-        case 5: // BROADCAST
-            TTL = 4;
-            enviarIP(paquete, vport_tx, ip_Nodo, ips[5], TTL);
-            break;
-        default:
-            return 1;
-    }
-    return 1;
-}
-
 /*  Nombre de la función: menu_recibir
  *  Tipo de función: void
  *  Parámetros: FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4]
@@ -307,7 +265,7 @@ void mostrar_menu() {
 }
 
 
-void verificar_entrada_usuario(FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[4], int num_rutas) {
+void verificar_entrada_usuario(BYTE ips[6][4], FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[4], int num_rutas) {
     fd_set conjunto_lectura;
     struct timeval tiempo_espera;
     int opcion;
@@ -327,7 +285,7 @@ void verificar_entrada_usuario(FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], 
             getchar(); // Consumir el salto de línea o el carácter residual en el buffer
 
             // Procesar la opción seleccionada
-            ejecutar_opcion(opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, num_rutas);
+            ejecutar_opcion(ips, opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, num_rutas);
         } else {
             printf("Entrada inválida. Intente de nuevo.\n");
             getchar(); // Limpiar el buffer de entrada
