@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "serial.h"
-#include "conio.h"
 #include "slip.h"
 #include "ip.h"
 #include "funcionesIP.h"
