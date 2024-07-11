@@ -14,4 +14,5 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
 void imprimir_rutas(ruta* tabla_rutas, int num_rutas);
 void mostrar_menu();
 void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[], int num_rutas);
+void verificar_entrada_usuario(FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[4], int num_rutas);
 #endif

@@ -5,6 +5,7 @@
 #include "serial.h"
 #include "slip.h"
 #include "ip.h"
+#include <sys/select.h>
 #include "funcionesIP.h"
 
 #define MAX_DATA_SIZE 1500

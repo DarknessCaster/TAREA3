@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "ip.h"
 #include "funcionesIP.h"
+#include <sys/select.h>
 #include "serial.h"
 #include "slip.h"
 
@@ -303,6 +304,35 @@ void mostrar_menu() {
     printf("3. Mostrar tabla de rutas\n");
     printf("4. Salir\n");
     printf("Opción: ");
+}
+
+
+void verificar_entrada_usuario(FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[4], int num_rutas) {
+    fd_set conjunto_lectura;
+    struct timeval tiempo_espera;
+    int opcion;
+
+    // Configurar el conjunto de descriptores de archivo para monitorizar la entrada estándar (teclado)
+    FD_ZERO(&conjunto_lectura);
+    FD_SET(STDIN_FILENO, &conjunto_lectura);
+
+    // Configurar el tiempo de espera para select (0 segundos y 0 microsegundos)
+    tiempo_espera.tv_sec = 0;
+    tiempo_espera.tv_usec = 0;
+
+    // Verificar si hay entrada del usuario sin bloquear
+    if (select(STDIN_FILENO + 1, &conjunto_lectura, NULL, NULL, &tiempo_espera) > 0) {
+        // Si hay entrada del usuario, leer la opción
+        if (scanf("%d", &opcion) == 1) {
+            getchar(); // Consumir el salto de línea o el carácter residual en el buffer
+
+            // Procesar la opción seleccionada
+            ejecutar_opcion(opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, num_rutas);
+        } else {
+            printf("Entrada inválida. Intente de nuevo.\n");
+            getchar(); // Limpiar el buffer de entrada
+        }
+    }
 }
 
 void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[], int num_rutas) {
