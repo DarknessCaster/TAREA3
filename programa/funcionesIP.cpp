@@ -386,7 +386,7 @@ void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2,
                     }
                     break;
                 default:
-                    return 1;
+                    break;
             }
             break;
         case 3:
