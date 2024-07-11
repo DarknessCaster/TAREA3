@@ -29,9 +29,9 @@ int main(int nargs, char* arg_arr[]){
         // Abrir puertos bidireccionales
         FILE *vport_b1 = fopen(puerto_b1, "r+"); 
         FILE *vport_b2 = fopen(puerto_b2, "r+"); 
-        // Inicializar tabla de ruta
-        // Bucle infinito para enviar y recibir mensajes
+
         convertir_ip(ip_nodo, ip_Nodo);
+        // Bucle infinito para enviar y recibir mensajes
         while (1) {
             //enviar broadcast
             enviar_broadcast(vport_b1, vport_b2, ip_Nodo, ips);
