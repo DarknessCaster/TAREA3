@@ -54,7 +54,7 @@ int main(int nargs, char* arg_arr[]){
             */
             int opcion = verificar_entrada_usuario();
             if (opcion != -1) {
-                ejecutar_opcion(opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, &num_rutas);
+                ejecutar_opcion(ips, opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, num_rutas);
             }
            
         }
