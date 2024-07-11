@@ -143,16 +143,13 @@ int fcs(BYTE * arr, int tam){
  *                             y lo envía utilizando la función writeSlip. La función incrementa un contador de ID para cada paquete enviado.
  */
 void enviarIP(IP paquete, FILE *vport_tx, BYTE ip_origen[4], BYTE ip_destino[4], BYTE TTL){
-    int contador_id = 0;
+    int contador_id = 1;
     int lng_frame;
-    while(true){
-    // Encapsula en la trama FRAMES y ademas se guarda el largo de este en lng_frame
-        printf("Escriba un mensaje: ");
-        fgets((char*)paquete.datos, MAX_DATA_SIZE, stdin); // Almacena mensaje
-        lng_frame = encapsularIP(paquete, TTL, contador_id, ip_origen, ip_destino);
-        contador_id++;
-        writeSlip(paquete.FRAMES, lng_frame, vport_tx);// ENVIAR POR SLIP
-    }
+    printf("Escriba un mensaje: ");
+    fgets((char*)paquete.datos, MAX_DATA_SIZE, stdin); // Almacena mensaje
+    lng_frame = encapsularIP(paquete, TTL, contador_id, ip_origen, ip_destino);
+    contador_id++;
+    writeSlip(paquete.FRAMES, lng_frame, vport_tx);// ENVIAR POR SLIP
 }
 
 /*  Nombre de la función: menu_enviar
@@ -307,23 +304,69 @@ void mostrar_menu() {
     printf("Opción: ");
 }
 
-void ejecutar_opcion(int opcion, FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[], int *num_rutas) {
+void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[], int num_rutas) {
     switch (opcion) {
         case 1:
             enviar_broadcast(vport_b1, vport_b2, ip_Nodo, ips);
             break;
-        case 2: {
+        case 2: 
             char ip_destino[16];
-            char mensaje[MAX_DATA_SIZE];
-            printf("Ingrese la IP destino: ");
-            scanf("%s", ip_destino);
+            IP paquete;
+            int opc;
+            printf("A quien desea enviar el mensaje?\n");
+            printf("1. B\n2. C\n3. D\n4. E\n5. A todos (broadcast)\n");
+            printf("Ingrese una opcion: ");
+            scanf("%d", &opc);
             printf("Ingrese el mensaje: ");
-            scanf(" %[^\n]s", mensaje); // Leer mensaje con espacios
+            fgets((char*)paquete.datos, MAX_DATA_SIZE, stdin); // Almacena mensaje
+            switch (opc) {
+                case 1: // NODO B
+                    for (int i = 0; i < num_rutas; i++) {
+                        if (memcmp(tabla_rutas[i].destino, ips[1], sizeof(ip_destino)) == 0) {
+                            enviar_unicast(vport_b1, vport_b2, ip_Nodo, ip_destino, mensaje, tabla_rutas, *num_rutas);
+                            break;
+                        }
+                        else{
+                            printf("Nodo destino no encontrado\n");
+                        }
+                    }
+                    enviarIP(paquete, vport_tx, ip_Nodo, ips[1], TTL);
+                    break;
+                case 2: // NODO C
+                    TTL = 2;
+                    enviarIP(paquete, vport_tx, ip_Nodo, ips[2], TTL);
+                    break;
+                case 3: // NODO D
+                    TTL = 3;
+                    enviarIP(paquete, vport_tx, ip_Nodo, ips[3], TTL);
+                    break;
+                case 4: // NODO E
+                    TTL = 4;
+                    enviarIP(paquete, vport_tx, ip_Nodo, ips[4], TTL);
+                    break;
+                case 5: // BROADCAST
+                    TTL = 5;
+                    enviarIP(paquete, vport_tx, ip_Nodo, ips[5], TTL);
+                    break;
+                default:
+                    return 1;
+            }
+
+            // Buscar la IP destino en la tabla de rutas
+            int i;
+            for (i = 0; i < num_rutas; i++) {
+                // Aquí debes adaptar la comparación según la estructura de tu tabla de rutas
+                // Supongamos que la tabla_rutas tiene un campo destino que es un arreglo de BYTE
+                if (memcmp(tabla_rutas[i].destino, ip_destino, sizeof(ip_destino)) == 0) {
+                    // Si la IP destino está en la tabla de rutas, enviar unicast
+                    enviar_unicast(vport_b1, vport_b2, ip_Nodo, ip_destino, mensaje, tabla_rutas, *num_rutas);
+                    break;
+                }
+            } 
             enviar_unicast(vport_b1, vport_b2, ip_Nodo, ip_destino, mensaje, tabla_rutas, *num_rutas);
             break;
-        }
         case 3:
-            mostrar_tabla_rutas(tabla_rutas, *num_rutas);
+            imprimir_rutas(tabla_rutas, num_rutas);
             break;
         case 4:
             fclose(vport_b1);
