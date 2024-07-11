@@ -29,7 +29,7 @@ int main(int nargs, char* arg_arr[]){
         // Abrir puertos bidireccionales
         FILE *vport_b1 = fopen(puerto_b1, "r+"); 
         FILE *vport_b2 = fopen(puerto_b2, "r+"); 
-        prinf("Recuerde que para abrir el menu debe digitar una de las siguientes opciones\n");
+        printf("Recuerde que para abrir el menu debe digitar una de las siguientes opciones\n");
         mostrar_menu();
         convertir_ip(ip_nodo, ip_Nodo);
         // Bucle infinito para enviar y recibir mensajes
