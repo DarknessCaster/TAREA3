@@ -321,7 +321,7 @@ void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2,
             switch (opc) {
                 case 0: // NODO A
                     for (int i = 0; i < num_rutas; i++) {
-                        if (memcmp(tabla_rutas[i].destino, ips[opcion], 4) == 0) {
+                        if (memcmp(tabla_rutas[i].ip, ips[opcion], 4) == 0) {
                             enviarIP(paquete, vport_b1, ip_Nodo, ips[opcion], tabla_rutas[i].TTL);
                             break;
                         }
@@ -332,7 +332,7 @@ void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2,
                     break;
                 case 1: // NODO B
                     for (int i = 0; i < num_rutas; i++) {
-                        if (memcmp(tabla_rutas[i].destino, ips[opcion], 4) == 0) {
+                        if (memcmp(tabla_rutas[i].ip, ips[opcion], 4) == 0) {
                             enviarIP(paquete, vport_b1, ip_Nodo, ips[opcion], tabla_rutas[i].TTL);
                             break;
                         }
@@ -343,7 +343,7 @@ void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2,
                     break;
                 case 2: // NODO C
                     for (int i = 0; i < num_rutas; i++) {
-                        if (memcmp(tabla_rutas[i].destino, ips[opcion], 4) == 0) {
+                        if (memcmp(tabla_rutas[i].ip, ips[opcion], 4) == 0) {
                             enviarIP(paquete, vport_b1, ip_Nodo, ips[opcion], tabla_rutas[i].TTL);
                             break;
                         }
@@ -354,7 +354,7 @@ void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2,
                     break;
                 case 3: // NODO D
                     for (int i = 0; i < num_rutas; i++) {
-                        if (memcmp(tabla_rutas[i].destino, ips[opcion], 4) == 0) {
+                        if (memcmp(tabla_rutas[i].ip, ips[opcion], 4) == 0) {
                             enviarIP(paquete, vport_b1, ip_Nodo, ips[opcion], tabla_rutas[i].TTL);
                             break;
                         }
@@ -365,7 +365,7 @@ void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2,
                     break;
                 case 4: // NODO E
                     for (int i = 0; i < num_rutas; i++) {
-                        if (memcmp(tabla_rutas[i].destino, ips[opcion], 4) == 0) {
+                        if (memcmp(tabla_rutas[i].ip, ips[opcion], 4) == 0) {
                             enviarIP(paquete, vport_b1, ip_Nodo, ips[opcion], tabla_rutas[i].TTL);
                             break;
                         }
@@ -376,7 +376,7 @@ void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2,
                     break;
                 case 5: // BROADCAST
                     for (int i = 0; i < num_rutas; i++) {
-                        if (memcmp(tabla_rutas[i].destino, ips[opcion], 4) == 0) {
+                        if (memcmp(tabla_rutas[i].ip, ips[opcion], 4) == 0) {
                             enviarIP(paquete, vport_b1, ip_Nodo, ips[opcion], tabla_rutas[i].TTL);
                             break;
                         }
@@ -388,19 +388,6 @@ void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2,
                 default:
                     return 1;
             }
-
-            // Buscar la IP destino en la tabla de rutas
-            int i;
-            for (i = 0; i < num_rutas; i++) {
-                // Aquí debes adaptar la comparación según la estructura de tu tabla de rutas
-                // Supongamos que la tabla_rutas tiene un campo destino que es un arreglo de BYTE
-                if (memcmp(tabla_rutas[i].destino, ip_destino, sizeof(ip_destino)) == 0) {
-                    // Si la IP destino está en la tabla de rutas, enviar unicast
-                    enviar_unicast(vport_b1, vport_b2, ip_Nodo, ip_destino, mensaje, tabla_rutas, *num_rutas);
-                    break;
-                }
-            } 
-            enviar_unicast(vport_b1, vport_b2, ip_Nodo, ip_destino, mensaje, tabla_rutas, *num_rutas);
             break;
         case 3:
             imprimir_rutas(tabla_rutas, num_rutas);
