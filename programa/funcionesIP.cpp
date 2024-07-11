@@ -253,7 +253,12 @@ int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paque
     return num_rutas;
 }
 
-
+/*  Nombre de la función: imprimir_rutas
+ *  Tipo de función: void
+ *  Parámetros: ruta* tabla_rutas, int num_rutas
+ *  Descripción de la función: Esta función imprime por consola la tabla de rutas con cada entrada mostrando
+ *                             el destino IP, la distancia (TTL), y el puerto por donde se recibe el mensaje.
+ */
 void imprimir_rutas(ruta* tabla_rutas, int num_rutas) {
     printf("Tabla de rutas:\n");
     for (int i = 0; i < num_rutas; i++) {
@@ -264,6 +269,11 @@ void imprimir_rutas(ruta* tabla_rutas, int num_rutas) {
     }
 }
 
+/*  Nombre de la función: mostrar_menu
+ *  Tipo de función: void
+ *  Parámetros: Ninguno
+ *  Descripción de la función: Esta función imprime por consola las opciones disponibles en el menú de ejecución.
+ */
 void mostrar_menu() {
     printf("=== OPCIONES DE MENU PARA EJECUTAR ===\n");
     printf("===== 1. Enviar mensaje broadcast =====\n");
@@ -272,7 +282,13 @@ void mostrar_menu() {
     printf("=============== 4. Salir ===============\n");
 }
 
-
+/*  Nombre de la función: verificar_entrada_usuario
+ *  Tipo de función: int
+ *  Parámetros: Ninguno
+ *  Descripción de la función: Esta función verifica si hay entrada de usuario en la entrada estandar (teclado)
+ *                             sin bloquear el programa. Retorna la opción ingresada por el usuario si se detecta,
+ *                             o retorna -1 si no hay entrada disponible o si la entrada es inválida.
+ */
 int verificar_entrada_usuario() {
     fd_set conjunto_lectura;
     struct timeval tiempo_espera;
@@ -299,12 +315,21 @@ int verificar_entrada_usuario() {
     return opcion;
 }
 
+/*  Nombre de la función: ejecutar_opcion
+ *  Tipo de función: void
+ *  Parámetros: BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[], int num_rutas
+ *  Descripción de la función: Esta función ejecuta la opción seleccionada por el usuario en el menú.
+ *                             Dependiendo de la opción elegida, realiza acciones como enviar mensajes
+ *                             broadcast, unicast a nodos específicos, mostrar la tabla de rutas o salir del programa.
+ */
 void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[], int num_rutas) {
     switch (opcion) {
-        case 1:
+
+        case 1: // Enviar broadcast
             enviar_broadcast(vport_b1, vport_b2, ip_Nodo, ips);
             break;
-        case 2: 
+
+        case 2: // Enviar unicast
             IP paquete;
             int opc;
             printf("A quien desea enviar el mensaje?\n");
