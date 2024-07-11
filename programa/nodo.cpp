@@ -29,7 +29,8 @@ int main(int nargs, char* arg_arr[]){
         // Abrir puertos bidireccionales
         FILE *vport_b1 = fopen(puerto_b1, "r+"); 
         FILE *vport_b2 = fopen(puerto_b2, "r+"); 
-
+        prinf("Recuerde que para abrir el menu debe digitar una de las siguientes opciones\n");
+        mostrar_menu();
         convertir_ip(ip_nodo, ip_Nodo);
         // Bucle infinito para enviar y recibir mensajes
         while (1) {
@@ -40,23 +41,11 @@ int main(int nargs, char* arg_arr[]){
             num_rutas = recibir_mensaje(vport_b2, vport_b1, ip_Nodo, ips, tabla_rutas, num_rutas, puerto_b1);
             sleep(5); // envia cada 5 segundos
 
-            // Verificar si hay entrada del usuario para mostrar el menú
-            // La siguiente implementacion fue para hacer que si el programa
-            // detecta una entrada ejecute el menu y el usuario sea capaz de enviar mensaje
-            // Pero al momento de ejecutar el nodo el programa quedaba esperando una entrada por teclado
-            // Evitando asi que se creen las rutas automaticamente
-            /*if (getchar()) {
-                int opcion;
-                mostrar_menu();
-                scanf("%d", &opcion);
-                getchar();
-                ejecutar_opcion(ips, opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, num_rutas);
-            */
+            // Verificar si el usuario ingresa alguna opcion del menu
             int opcion = verificar_entrada_usuario();
-            if (opcion != -1) {
+            if (opcion == 1 || opcion == 2 || opcion == 3 || opcion == 4) {
                 ejecutar_opcion(ips, opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, num_rutas);
             }
-           
         }
         fclose(vport_b1);
         fclose(vport_b2);

@@ -256,12 +256,11 @@ void imprimir_rutas(ruta* tabla_rutas, int num_rutas) {
 }
 
 void mostrar_menu() {
-    printf("Seleccione una opción:\n");
+    printf("=== OPCIONES DE MENU PARA EJECUTAR ===\n");
     printf("1. Enviar mensaje broadcast\n");
     printf("2. Enviar mensaje unicast\n");
     printf("3. Mostrar tabla de rutas\n");
     printf("4. Salir\n");
-    printf("Opción: ");
 }
 
 
@@ -288,7 +287,6 @@ int verificar_entrada_usuario() {
             getchar(); // Limpiar el buffer de entrada
         }
     }
-    
     return opcion;
 }
 
