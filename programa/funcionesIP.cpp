@@ -297,3 +297,39 @@ void imprimir_rutas(ruta* tabla_rutas, int num_rutas) {
                tabla_rutas[i].TTL, tabla_rutas[i].puerto);
     }
 }
+
+void mostrar_menu() {
+    printf("Seleccione una opción:\n");
+    printf("1. Enviar mensaje broadcast\n");
+    printf("2. Enviar mensaje unicast\n");
+    printf("3. Mostrar tabla de rutas\n");
+    printf("4. Salir\n");
+    printf("Opción: ");
+}
+
+void ejecutar_opcion(int opcion, FILE *vport_b1, FILE *vport_b2, BYTE ip_Nodo[4], ruta tabla_rutas[], int *num_rutas) {
+    switch (opcion) {
+        case 1:
+            enviar_broadcast(vport_b1, vport_b2, ip_Nodo, ips);
+            break;
+        case 2: {
+            char ip_destino[16];
+            char mensaje[MAX_DATA_SIZE];
+            printf("Ingrese la IP destino: ");
+            scanf("%s", ip_destino);
+            printf("Ingrese el mensaje: ");
+            scanf(" %[^\n]s", mensaje); // Leer mensaje con espacios
+            enviar_unicast(vport_b1, vport_b2, ip_Nodo, ip_destino, mensaje, tabla_rutas, *num_rutas);
+            break;
+        }
+        case 3:
+            mostrar_tabla_rutas(tabla_rutas, *num_rutas);
+            break;
+        case 4:
+            fclose(vport_b1);
+            fclose(vport_b2);
+            exit(0);
+        default:
+            printf("Opción no válida. Intente de nuevo.\n");
+    }
+}

@@ -22,10 +22,10 @@ int main(int nargs, char* arg_arr[]){
         BYTE ip_Nodo[4];
         ruta tabla_rutas[4];
         int num_rutas = 0;
-        // Obtener ip del nodo y sus respectivos puertos.
+        // Obtener ip del nodo y sus respectivos puertos. 
         char* ip_nodo = arg_arr[1]; 
         char* puerto_b1 = arg_arr[2];
-        char* puerto_b2 = arg_arr[3];
+        char* puerto_b2 = arg_arr[3]; 
         // Abrir puertos bidireccionales
         FILE *vport_b1 = fopen(puerto_b1, "r+"); 
         FILE *vport_b2 = fopen(puerto_b2, "r+"); 
@@ -33,12 +33,20 @@ int main(int nargs, char* arg_arr[]){
         convertir_ip(ip_nodo, ip_Nodo);
         // Bucle infinito para enviar y recibir mensajes
         while (1) {
-            //enviar broadcast
-            enviar_broadcast(vport_b1, vport_b2, ip_Nodo, ips);
-            sleep(6); // envia cada 5 segundos
+            // Automatizacion de tablas de rutas
+            enviar_broadcast(vport_b1, vport_b2, ip_Nodo, ips); //enviar broadcast
             //recibir broadcast
             num_rutas = recibir_mensaje(vport_b1, vport_b2, ip_Nodo, ips, tabla_rutas, num_rutas, puerto_b2);
             num_rutas = recibir_mensaje(vport_b2, vport_b1, ip_Nodo, ips, tabla_rutas, num_rutas, puerto_b1);
+            sleep(5); // envia cada 5 segundos
+
+            // Verificar si hay entrada del usuario para mostrar el menú
+            if (kbhit()) {
+                int opcion;
+                mostrar_menu();
+                scanf("%d", &opcion);
+                ejecutar_opcion(opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, &num_rutas);
+            }
         }
         fclose(vport_b1);
         fclose(vport_b2);
