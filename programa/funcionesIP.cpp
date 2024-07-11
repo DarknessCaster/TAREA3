@@ -310,43 +310,80 @@ void ejecutar_opcion(BYTE ips[6][4], int opcion, FILE *vport_b1, FILE *vport_b2,
             enviar_broadcast(vport_b1, vport_b2, ip_Nodo, ips);
             break;
         case 2: 
-            char ip_destino[16];
             IP paquete;
             int opc;
             printf("A quien desea enviar el mensaje?\n");
-            printf("1. B\n2. C\n3. D\n4. E\n5. A todos (broadcast)\n");
+            printf("0. A\n1. B\n2. C\n3. D\n4. E\n5. A todos (broadcast)\n");
             printf("Ingrese una opcion: ");
             scanf("%d", &opc);
             printf("Ingrese el mensaje: ");
             fgets((char*)paquete.datos, MAX_DATA_SIZE, stdin); // Almacena mensaje
             switch (opc) {
-                case 1: // NODO B
+                case 0: // NODO A
                     for (int i = 0; i < num_rutas; i++) {
-                        if (memcmp(tabla_rutas[i].destino, ips[1], sizeof(ip_destino)) == 0) {
-                            enviar_unicast(vport_b1, vport_b2, ip_Nodo, ip_destino, mensaje, tabla_rutas, *num_rutas);
+                        if (memcmp(tabla_rutas[i].destino, ips[opcion], 4) == 0) {
+                            enviarIP(paquete, vport_b1, ip_Nodo, ips[opcion], tabla_rutas[i].TTL);
                             break;
                         }
                         else{
                             printf("Nodo destino no encontrado\n");
                         }
                     }
-                    enviarIP(paquete, vport_tx, ip_Nodo, ips[1], TTL);
+                    break;
+                case 1: // NODO B
+                    for (int i = 0; i < num_rutas; i++) {
+                        if (memcmp(tabla_rutas[i].destino, ips[opcion], 4) == 0) {
+                            enviarIP(paquete, vport_b1, ip_Nodo, ips[opcion], tabla_rutas[i].TTL);
+                            break;
+                        }
+                        else{
+                            printf("Nodo destino no encontrado\n");
+                        }
+                    }
                     break;
                 case 2: // NODO C
-                    TTL = 2;
-                    enviarIP(paquete, vport_tx, ip_Nodo, ips[2], TTL);
+                    for (int i = 0; i < num_rutas; i++) {
+                        if (memcmp(tabla_rutas[i].destino, ips[opcion], 4) == 0) {
+                            enviarIP(paquete, vport_b1, ip_Nodo, ips[opcion], tabla_rutas[i].TTL);
+                            break;
+                        }
+                        else{
+                            printf("Nodo destino no encontrado\n");
+                        }
+                    }
                     break;
                 case 3: // NODO D
-                    TTL = 3;
-                    enviarIP(paquete, vport_tx, ip_Nodo, ips[3], TTL);
+                    for (int i = 0; i < num_rutas; i++) {
+                        if (memcmp(tabla_rutas[i].destino, ips[opcion], 4) == 0) {
+                            enviarIP(paquete, vport_b1, ip_Nodo, ips[opcion], tabla_rutas[i].TTL);
+                            break;
+                        }
+                        else{
+                            printf("Nodo destino no encontrado\n");
+                        }
+                    }
                     break;
                 case 4: // NODO E
-                    TTL = 4;
-                    enviarIP(paquete, vport_tx, ip_Nodo, ips[4], TTL);
+                    for (int i = 0; i < num_rutas; i++) {
+                        if (memcmp(tabla_rutas[i].destino, ips[opcion], 4) == 0) {
+                            enviarIP(paquete, vport_b1, ip_Nodo, ips[opcion], tabla_rutas[i].TTL);
+                            break;
+                        }
+                        else{
+                            printf("Nodo destino no encontrado\n");
+                        }
+                    }
                     break;
                 case 5: // BROADCAST
-                    TTL = 5;
-                    enviarIP(paquete, vport_tx, ip_Nodo, ips[5], TTL);
+                    for (int i = 0; i < num_rutas; i++) {
+                        if (memcmp(tabla_rutas[i].destino, ips[opcion], 4) == 0) {
+                            enviarIP(paquete, vport_b1, ip_Nodo, ips[opcion], tabla_rutas[i].TTL);
+                            break;
+                        }
+                        else{
+                            printf("Nodo destino no encontrado\n");
+                        }
+                    }
                     break;
                 default:
                     return 1;

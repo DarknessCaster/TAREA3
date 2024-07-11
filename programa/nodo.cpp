@@ -42,10 +42,11 @@ int main(int nargs, char* arg_arr[]){
             sleep(5); // envia cada 5 segundos
 
             // Verificar si hay entrada del usuario para mostrar el menú
-            if (_kbhit()) {
+            if (getchar()) {
                 int opcion;
                 mostrar_menu();
                 scanf("%d", &opcion);
+                getchar();
                 ejecutar_opcion(opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, num_rutas);
             }
         }
