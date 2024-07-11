@@ -46,7 +46,7 @@ int main(int nargs, char* arg_arr[]){
                 mostrar_menu();
                 scanf("%d", &opcion);
                 getchar();
-                ejecutar_opcion(opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, num_rutas);
+                ejecutar_opcion(ips, opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, num_rutas);
             }
         }
         fclose(vport_b1);
