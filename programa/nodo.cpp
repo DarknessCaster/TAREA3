@@ -41,9 +41,7 @@ int main(int nargs, char* arg_arr[]){
             num_rutas = recibir_mensaje(vport_b1, vport_b2, ip_Nodo, ips, tabla_rutas, num_rutas, puerto_b2);
             num_rutas = recibir_mensaje(vport_b2, vport_b1, ip_Nodo, ips, tabla_rutas, num_rutas, puerto_b1);
 
-
             // Verificar si el usuario ingresa alguna opcion del menu
-            printf("Ingrese aca su opcion: ");
             int opcion = verificar_entrada_usuario();
             if (opcion == 1 || opcion == 2 || opcion == 3 || opcion == 4) {
                 ejecutar_opcion(ips, opcion, vport_b1, vport_b2, ip_Nodo, tabla_rutas, num_rutas);

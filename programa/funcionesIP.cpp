@@ -207,7 +207,11 @@ int recibir_mensaje(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6]
     return num_rutas;
 }
 
-
+/*  Nombre de la función: enviar_broadcast
+ *  Tipo de función: void
+ *  Parámetros: FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4]
+ *  Descripción de la función: Esta función envía un mensaje de broadcast a través ambos puertos del nodo.
+ */
 void enviar_broadcast(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[6][4]) {
     struct IP paquete;
     int lng_frame;
@@ -218,6 +222,11 @@ void enviar_broadcast(FILE *vport_tx, FILE *vport_rx, BYTE ip_Nodo[4], BYTE ips[
     writeSlip(paquete.FRAMES, lng_frame, vport_rx);
 }
 
+/*  Nombre de la función: actualizar_rutas
+ *  Tipo de función: int
+ *  Parámetros: char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paquete_rx, BYTE TTL_rx
+ *  Descripción de la función: Esta función actualiza la tabla de rutas con la información del paquete IP recibido.
+ */
 int actualizar_rutas(char* puerto_rx, ruta* tabla_rutas, int num_rutas, IP paquete_rx, BYTE TTL_rx) {
     bool actualizado = false;
     for (int i = 0; i < num_rutas; i++) {
@@ -257,10 +266,10 @@ void imprimir_rutas(ruta* tabla_rutas, int num_rutas) {
 
 void mostrar_menu() {
     printf("=== OPCIONES DE MENU PARA EJECUTAR ===\n");
-    printf("1. Enviar mensaje broadcast\n");
-    printf("2. Enviar mensaje unicast\n");
-    printf("3. Mostrar tabla de rutas\n");
-    printf("4. Salir\n");
+    printf("===== 1. Enviar mensaje broadcast =====\n");
+    printf("====== 2. Enviar mensaje unicast ======\n");
+    printf("====== 3. Mostrar tabla de rutas ======\n");
+    printf("=============== 4. Salir ===============\n");
 }
 
 
